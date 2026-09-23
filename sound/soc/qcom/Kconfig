@@ -134,6 +134,24 @@ config SND_SOC_QDSP6_USB
       with the SoC USB framework to initialize a session
       with active USB SND devices.
 
+config SND_SOC_QDSP6_Q6VOICE
+	tristate "SoC ALSA SoC driver for QDSP6 voice services"
+	help
+	  The MVM/CVS/CVP triple that carries a circuit-switched call inside
+	  the DSP. On Qualcomm, call audio never reaches the CPU: the DSP
+	  routes it between the modem and the codec, and these services are
+	  what set that route up.
+
+	  Ported from sdm670-mainline; not in mainline.
+
+config SND_SOC_QDSP6_Q6VOICE_DAI
+	tristate "SoC ALSA SoC driver for QDSP6 voice DAIs"
+	depends on SND_SOC_QDSP6_Q6VOICE
+	help
+	  Exposes CS-VOICE and VOICEMMODE1 as PCM devices, which is what a
+	  userspace voice daemon (q6voiced) opens and holds for the duration
+	  of a call.
+
 config SND_SOC_QDSP6
 	tristate "SoC ALSA audio driver for QDSP6"
 	depends on QCOM_APR
