@@ -1418,6 +1418,45 @@
 							#sound-dai-cells = <0>;
 						};
 					};
+
+					/*
+					 * The voice services. A call on Qualcomm is not carried by
+					 * the modem alone: the DSP routes audio between the modem
+					 * and the codec, and MVM (session management), CVS (the
+					 * stream) and CVP (the processing) are what set that route
+					 * up. Without them there is no voice PCM for a userspace
+					 * voice daemon to hold open, and a dial is torn down the
+					 * moment it connects.
+					 *
+					 * Not in mainline. The drivers are ported from
+					 * sdm670-mainline, and this declaration follows that tree's
+					 * sdm670.dtsi.
+					 */
+					q6mvm: service@9 {
+						compatible = "qcom,q6mvm";
+						reg = <APR_SVC_ADSP_MVM>;
+						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+
+						q6voicedai: dais {
+							compatible = "qcom,q6voice-dais";
+							qcom,cvd-v2.3;
+							#address-cells = <1>;
+							#size-cells = <0>;
+							#sound-dai-cells = <1>;
+						};
+					};
+
+					q6cvs: service@a {
+						compatible = "qcom,q6cvs";
+						reg = <APR_SVC_ADSP_CVS>;
+						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+					};
+
+					q6cvp: service@b {
+						compatible = "qcom,q6cvp";
+						reg = <APR_SVC_ADSP_CVP>;
+						qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+					};
 				};
 
 				fastrpc {

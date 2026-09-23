@@ -21,6 +21,7 @@
 #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
 #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
 #include <dt-bindings/sound/qcom,q6asm.h>
+#include <dt-bindings/sound/qcom,q6voice.h>
 #include <dt-bindings/usb/pd.h>
 #include "sm7225.dtsi"
 #include "pm6150l.dtsi"
@@ -1538,7 +1539,34 @@
 		};
 	};
 
+	/*
+	 * The voice front ends.
+	 *
+	 * A call's audio never reaches the CPU on this SoC -- the DSP carries it
+	 * between the modem and the codec -- but something in userspace still has
+	 * to open a PCM and hold it for the duration of the call, or the session
+	 * is torn down the moment it connects. These are the PCMs it opens.
+	 *
+	 * Both are declared rather than just VoiceMMode1: CS-VOICE is the
+	 * circuit-switched path that a network with 2G/3G fallback uses, and
+	 * VoiceMMode1 is the multimode one. Which a given SIM needs is a property
+	 * of the operator, not of this handset, so the board offers both.
+	 */
+	cs-voice-dai-link {
+		link-name = "CS-VOICE";
 
+		cpu {
+			sound-dai = <&q6voicedai CS_VOICE>;
+		};
+	};
+
+	voicemmode1-dai-link {
+		link-name = "VoiceMMode1";
+
+		cpu {
+			sound-dai = <&q6voicedai VOICEMMODE1>;
+		};
+	};
 
 	usb-dai-link {
 		link-name = "USB Playback";
