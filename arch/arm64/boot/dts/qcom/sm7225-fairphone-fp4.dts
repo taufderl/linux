@@ -1376,8 +1376,29 @@
 };
 
 &q6asmdai {
+	/*
+	 * Two front ends, split by direction.
+	 *
+	 * q6asm-dais builds its DAI list from these child nodes -- there is no
+	 * default set -- so a dai-link naming MULTIMEDIA2 without a dai@1 here
+	 * fails the whole card with "MultiMedia2: error getting cpu dai name".
+	 *
+	 * Splitting them rather than declaring one full-duplex front end is the
+	 * point: with a single front end, playback and capture contend for one
+	 * q6asm session and the second opener is refused with "Audio Client
+	 * already active", so the microphone and the speaker cannot be used at
+	 * once. Giving each direction its own front end also makes the ALSA
+	 * device list unambiguous -- aplay -l shows only MultiMedia1, arecord -l
+	 * only MultiMedia2 -- so nothing has to be told which to pick.
+	 */
 	dai@0 {
 		reg = <MSM_FRONTEND_DAI_MULTIMEDIA1>;
+		direction = <Q6ASM_DAI_RX>;
+	};
+
+	dai@1 {
+		reg = <MSM_FRONTEND_DAI_MULTIMEDIA2>;
+		direction = <Q6ASM_DAI_TX>;
 	};
 };
 
@@ -1490,6 +1511,34 @@
 			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA1>;
 		};
 	};
+
+	/*
+	 * A second front end, for capture.
+	 *
+	 * With only MultiMedia1 declared, the card exposes exactly one PCM and
+	 * `aplay -l` and `arecord -l` both name it. Playback and capture then
+	 * contend for a single q6asm session, and whichever opens second is
+	 * refused:
+	 *
+	 *   q6asm-dai: Audio Client already active
+	 *   q6asm-dai: q6asm_dai_prepare: q6asm_open_write failed
+	 *   ASoC error (-22): at snd_soc_pcm_component_prepare()
+	 *
+	 * which on a phone means the microphone and the speaker cannot be used
+	 * at the same time -- no call audio, and a recorder that fails if
+	 * anything played recently. A second front end gives capture its own
+	 * session. q6routing already carries the mixers for MultiMedia1..8, so
+	 * nothing else has to change to reach it.
+	 */
+	mm2-dai-link {
+		link-name = "MultiMedia2";
+
+		cpu {
+			sound-dai = <&q6asmdai MSM_FRONTEND_DAI_MULTIMEDIA2>;
+		};
+	};
+
+
 
 	usb-dai-link {
 		link-name = "USB Playback";
