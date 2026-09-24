@@ -1,0 +1,58 @@
+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+%YAML 1.2
+---
+$id: http://devicetree.org/schemas/net/nfc/st,st21nfcd.yaml#
+$schema: http://devicetree.org/meta-schemas/core.yaml#
+
+title: STMicroelectronics ST21NFCD NFC controller
+
+maintainers:
+  - Tim auf der Landwehr <tadl-git@taufderl.de>
+
+description:
+  An NFC controller speaking plain NCI over I2C, without the NDLC link
+  layer used by the ST21NFCB and ST21NFCC.
+
+properties:
+  compatible:
+    const: st,st21nfcd
+
+  reg:
+    maxItems: 1
+
+  interrupts:
+    maxItems: 1
+
+  reset-gpios:
+    maxItems: 1
+    description: Active-low reset line.
+
+  clocks:
+    maxItems: 1
+    description: Reference clock, where the board feeds one to the controller.
+
+required:
+  - compatible
+  - reg
+  - interrupts
+  - reset-gpios
+
+additionalProperties: false
+
+examples:
+  - |
+    #include <dt-bindings/gpio/gpio.h>
+    #include <dt-bindings/interrupt-controller/irq.h>
+
+    i2c {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        nfc@8 {
+            compatible = "st,st21nfcd";
+            reg = <0x08>;
+            interrupt-parent = <&gpio>;
+            interrupts = <9 IRQ_TYPE_LEVEL_HIGH>;
+            reset-gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
+        };
+    };
