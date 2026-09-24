@@ -67,6 +67,17 @@ source "drivers/nfc/microread/Kconfig"
 source "drivers/nfc/nfcmrvl/Kconfig"
 source "drivers/nfc/st21nfca/Kconfig"
 source "drivers/nfc/st-nci/Kconfig"
+
+config NFC_ST21NFCD
+	tristate "STMicroelectronics ST21NFCD NFC driver (I2C)"
+	depends on NFC_NCI && I2C
+	help
+	  Support for the STMicroelectronics ST21NFCD NFC controller over I2C.
+	  Unlike the ST21NFCB/C handled by the st-nci driver, this part speaks
+	  plain NCI with no link-layer framing.
+
+	  Say Y here to compile support for the ST21NFCD into the kernel or
+	  say M to compile it as a module. The module will be called st21nfcd.
 source "drivers/nfc/nxp-nci/Kconfig"
 source "drivers/nfc/s3fwrn5/Kconfig"
 source "drivers/nfc/st95hf/Kconfig"

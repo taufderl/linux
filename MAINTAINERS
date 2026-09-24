@@ -25678,6 +25678,13 @@ F:	Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
 F:	Documentation/userspace-api/media/drivers/vgxy61.rst
 F:	drivers/media/i2c/vgxy61.c
 
+ST ST21NFCD NFC DRIVER
+M:	Tim auf der Landwehr <tadl-git@taufderl.de>
+L:	oe-linux-nfc@lists.linux.dev
+S:	Maintained
+F:	Documentation/devicetree/bindings/net/nfc/st,st21nfcd.yaml
+F:	drivers/nfc/st21nfcd.c
+
 ST VL53L0X ToF RANGER(I2C) IIO DRIVER
 M:	Song Qiang <songqiang1304521@gmail.com>
 L:	linux-iio@vger.kernel.org
