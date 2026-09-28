@@ -1451,7 +1451,7 @@
 		};
 
 		rxmacro: codec@3200000 {
-			compatible = "qcom,sm6350-lpass-rx-macro";
+			compatible = "qcom,sm8250-lpass-rx-macro";
 			reg = <0x0 0x03200000 0x0 0x1000>;
 			pinctrl-0 = <&rx_swr_active>;
 			pinctrl-names = "default";
@@ -1497,7 +1497,7 @@
 		};
 
 		txmacro: codec@3220000 {
-			compatible = "qcom,sm6350-lpass-tx-macro";
+			compatible = "qcom,sm8250-lpass-tx-macro";
 			reg = <0x0 0x03220000 0x0 0x1000>;
 			pinctrl-0 = <&tx_swr_active>;
 			pinctrl-names = "default";
@@ -1545,7 +1545,7 @@
 		};
 
 		vamacro: codec@3370000 {
-			compatible = "qcom,sm6350-lpass-va-macro";
+			compatible = "qcom,sm8250-lpass-va-macro";
 			reg = <0x0 0x03370000 0x0 0x1000>;
 			status = "disabled";
 
